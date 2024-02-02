@@ -2,15 +2,14 @@
     "openapi": "3.0.0",
     "info": {
         "version": "1.0.0",
-        "title": "Seans-TypeScript-NodeJS-CRUD-REST-API-Boilerplate",
+        "title": "TypeScript-NodeJS-CRUD-REST-API-Boilerplate",
         "description": "A minimal and easy to follow example of what you need to create a CRUD style API in NodeJs using TypeScript",
         "license": {
             "name": "MIT",
             "url": "https://opensource.org/licenses/MIT"
         }
     },
-    "servers": [
-        {
+    "servers": [{
             "url": "/",
             "description": "Local Dev, or from Heroku"
         },
@@ -19,12 +18,10 @@
             "description": "With docker-compose and nginx proxy"
         }
     ],
-    "tags": [
-        {
-            "name": "Cats",
-            "description": "API for cats in the system"
-        }
-    ],
+    "tags": [{
+        "name": "Cats",
+        "description": "API for cats in the system"
+    }],
     "consumes": [
         "application/json"
     ],
@@ -80,31 +77,27 @@
             }
         },
         "/cats/{id}": {
-            "parameters": [
-                {
-                    "name": "id",
-                    "in": "path",
-                    "required": true,
-                    "description": "ID of the cat that we want to match",
-                    "type": "string"
-                }
-            ],
+            "parameters": [{
+                "name": "id",
+                "in": "path",
+                "required": true,
+                "description": "ID of the cat that we want to match",
+                "type": "string"
+            }],
             "get": {
                 "tags": [
                     "Cats"
                 ],
                 "summary": "Get cat with given ID",
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "required": true,
-                        "description": "Cat with id",
-                        "schema": {
-                            "$ref": "#/definitions/id"
-                        }
+                "parameters": [{
+                    "in": "path",
+                    "name": "id",
+                    "required": true,
+                    "description": "Cat with id",
+                    "schema": {
+                        "$ref": "#/definitions/id"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -133,17 +126,15 @@
                         }
                     }
                 },
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "required": true,
-                        "description": "Cat with new values of properties",
-                        "schema": {
-                            "$ref": "#/definitions/id"
-                        }
+                "parameters": [{
+                    "in": "path",
+                    "name": "id",
+                    "required": true,
+                    "description": "Cat with new values of properties",
+                    "schema": {
+                        "$ref": "#/definitions/id"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -164,17 +155,15 @@
                 "tags": [
                     "Cats"
                 ],
-                "parameters": [
-                    {
-                        "in": "path",
-                        "name": "id",
-                        "required": true,
-                        "description": "Delete Cat with id",
-                        "schema": {
-                            "$ref": "#/definitions/id"
-                        }
+                "parameters": [{
+                    "in": "path",
+                    "name": "id",
+                    "required": true,
+                    "description": "Delete Cat with id",
+                    "schema": {
+                        "$ref": "#/definitions/id"
                     }
-                ],
+                }],
                 "responses": {
                     "200": {
                         "description": "OK",

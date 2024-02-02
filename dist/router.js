@@ -32,79 +32,104 @@ const cors_1 = __importDefault(require("cors"));
 class Router {
     constructor(server) {
         const router = express.Router();
-        const cats = new Map();
-        cats[(0, uuid_1.v4)()] = { genus: "feline", name: "Cosmo", isHungry: true, lastFedDate: new Date() };
-        cats[(0, uuid_1.v4)()] = { genus: "feline", name: "Emmy", isHungry: true, lastFedDate: new Date() };
-        router.get('/', (req, res) => {
+        const users = new Map();
+        const userId1 = (0, uuid_1.v4)();
+        users.set(userId1, {
+            name: "John Doe",
+            phone: "9876543210",
+            age: "28",
+            caste: "Some Caste",
+            sex: "Male",
+            lastLogin: new Date(),
+            isCasteNoBar: false,
+            marriedStatus: "Single"
+        });
+        const userId2 = (0, uuid_1.v4)();
+        users.set(userId2, {
+            name: "Jane Doe",
+            phone: "9876543211",
+            age: "25",
+            caste: "Another Caste",
+            sex: "Female",
+            lastLogin: new Date(),
+            isCasteNoBar: true,
+            marriedStatus: "Married"
+        });
+        router.get("/", (req, res) => {
             res.json({
-                message: `Nothing to see here, [url]/cats instead.`
+                message: `Nothing to see here, [url]/users instead.`
             });
         });
-        //get all cats
-        router.get('/cats', (0, cors_1.default)(), (req, res) => {
+        // Get all users
+        router.get("/users", (0, cors_1.default)(), (req, res) => {
             res.json({
-                cats
+                users: Array.from(users.values())
             });
         });
-        //create new cat
-        router.post('/cats', (0, cors_1.default)(), (req, res) => {
+        // Create new user
+        router.post("/users", (0, cors_1.default)(), (req, res) => {
             try {
-                let cat = {};
-                Object.assign(cat, req.body);
-                const newUUID = (0, uuid_1.v4)();
-                cats[newUUID] = cat;
+                let user = {};
+                Object.assign(user, req.body);
+                const newUserId = (0, uuid_1.v4)();
+                users.set(newUserId, user);
                 res.json({
-                    uuid: newUUID
+                    userId: newUserId
                 });
             }
             catch (e) {
-                res.status(400).send(JSON.stringify({ "error": "problem with posted data" }));
+                res
+                    .status(400)
+                    .send(JSON.stringify({ error: "problem with posted data" }));
             }
         });
-        //get cat by id
-        router.get('/cats/:id', (0, cors_1.default)(), (req, res) => {
-            if (!!cats[req.params.id]) {
+        // Get user by id
+        router.get("/users/:id", (0, cors_1.default)(), (req, res) => {
+            const user = users.get(req.params.id);
+            if (user) {
                 res.json({
-                    cat: cats[req.params.id]
+                    user
                 });
             }
             else {
-                res.status(404).send(JSON.stringify({ "error": "no such cat" }));
+                res.status(404).send(JSON.stringify({ error: "no such user" }));
             }
         });
-        //update cat
-        router.put('/cats/:id', (0, cors_1.default)(), (req, res) => {
+        // Update user
+        router.put("/users/:id", (0, cors_1.default)(), (req, res) => {
             try {
-                if (!!cats[req.params.id]) {
-                    let cat = {};
-                    Object.assign(cat, req.body);
-                    cats[req.params.id] = cat;
+                const user = users.get(req.params.id);
+                if (user) {
+                    Object.assign(user, req.body);
                     res.json({
-                        cat: cats[req.params.id]
+                        user
                     });
                 }
                 else {
-                    res.status(404).send(JSON.stringify({ "error": "no such cat" }));
+                    res.status(404).send(JSON.stringify({ error: "no such user" }));
                 }
             }
             catch (e) {
-                res.status(400).send(JSON.stringify({ "error": "problem with posted data" }));
+                res
+                    .status(400)
+                    .send(JSON.stringify({ error: "problem with posted data" }));
             }
         });
-        //delete cat
-        router.delete('/cats/:id', (0, cors_1.default)(), (req, res) => {
-            if (!!cats[req.params.id]) {
-                delete cats[req.params.id];
+        // Delete user
+        router.delete("/users/:id", (0, cors_1.default)(), (req, res) => {
+            const user = users.get(req.params.id);
+            if (user) {
+                users.delete(req.params.id);
                 res.json({
-                    uuid: req.params.id
+                    userId: req.params.id
                 });
             }
             else {
-                res.status(404).send(JSON.stringify({ "error": "no such cat" }));
+                res.status(404).send(JSON.stringify({ error: "no such user" }));
             }
         });
-        router.options('*', (0, cors_1.default)());
-        server.use('/', router);
+        router.options("*", (0, cors_1.default)());
+        server.use("/", router);
     }
 }
 exports.default = Router;
