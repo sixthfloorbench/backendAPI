@@ -33,48 +33,46 @@ class Router {
     constructor(server) {
         const router = express.Router();
         const users = new Map();
-        const userId1 = (0, uuid_1.v4)();
-        users.set(userId1, {
-            name: "John Doe",
-            phone: "9876543210",
-            age: "28",
-            caste: "Some Caste",
+        users[(0, uuid_1.v4)()] = {
+            name: "user_1",
+            phone: "918171616551",
+            age: 25,
+            caste: "Caste1",
             sex: "Male",
             lastLogin: new Date(),
             isCasteNoBar: false,
             marriedStatus: "Single"
-        });
-        const userId2 = (0, uuid_1.v4)();
-        users.set(userId2, {
-            name: "Jane Doe",
-            phone: "9876543211",
-            age: "25",
-            caste: "Another Caste",
+        };
+        users[(0, uuid_1.v4)()] = {
+            name: "user_4",
+            phone: "81716151411",
+            age: 18,
+            caste: "Caste2",
             sex: "Female",
             lastLogin: new Date(),
-            isCasteNoBar: true,
-            marriedStatus: "Married"
-        });
+            isCasteNoBar: false,
+            marriedStatus: "Single"
+        };
         router.get("/", (req, res) => {
             res.json({
                 message: `Nothing to see here, [url]/users instead.`
             });
         });
-        // Get all users
+        //get all users
         router.get("/users", (0, cors_1.default)(), (req, res) => {
             res.json({
-                users: Array.from(users.values())
+                users
             });
         });
-        // Create new user
+        //create new user
         router.post("/users", (0, cors_1.default)(), (req, res) => {
             try {
                 let user = {};
                 Object.assign(user, req.body);
-                const newUserId = (0, uuid_1.v4)();
-                users.set(newUserId, user);
+                const newUUID = (0, uuid_1.v4)();
+                users[newUUID] = user;
                 res.json({
-                    userId: newUserId
+                    uuid: newUUID
                 });
             }
             catch (e) {
@@ -83,26 +81,26 @@ class Router {
                     .send(JSON.stringify({ error: "problem with posted data" }));
             }
         });
-        // Get user by id
+        //get user by id
         router.get("/users/:id", (0, cors_1.default)(), (req, res) => {
-            const user = users.get(req.params.id);
-            if (user) {
+            if (!!users[req.params.id]) {
                 res.json({
-                    user
+                    user: users[req.params.id]
                 });
             }
             else {
                 res.status(404).send(JSON.stringify({ error: "no such user" }));
             }
         });
-        // Update user
+        //update user
         router.put("/users/:id", (0, cors_1.default)(), (req, res) => {
             try {
-                const user = users.get(req.params.id);
-                if (user) {
+                if (!!users[req.params.id]) {
+                    let user = {};
                     Object.assign(user, req.body);
+                    users[req.params.id] = user;
                     res.json({
-                        user
+                        user: users[req.params.id]
                     });
                 }
                 else {
@@ -115,13 +113,12 @@ class Router {
                     .send(JSON.stringify({ error: "problem with posted data" }));
             }
         });
-        // Delete user
+        //delete user
         router.delete("/users/:id", (0, cors_1.default)(), (req, res) => {
-            const user = users.get(req.params.id);
-            if (user) {
-                users.delete(req.params.id);
+            if (!!users[req.params.id]) {
+                delete users[req.params.id];
                 res.json({
-                    userId: req.params.id
+                    uuid: req.params.id
                 });
             }
             else {

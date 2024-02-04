@@ -1,7 +1,7 @@
 type User = {
   name: String;
   phone: String;
-  age: String;
+  age: Number;
   caste: String;
   sex: String;
   lastLogin: Date;
